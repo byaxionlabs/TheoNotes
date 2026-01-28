@@ -132,7 +132,7 @@ export default function Home() {
             {/* Logo & Title */}
             <div className="flex items-center gap-4 mb-6 animate-in fade-in slide-in-from-left duration-500 delay-50">
              
-              <h1 className="text-4xl italic lg:text-5xl font-bold text-foreground font-serif">
+              <h1 className="text-4xl  text-primary italic lg:text-5xl font-bold text-foreground font-serif">
                 Theo Notes
               </h1>
             </div>
@@ -169,12 +169,7 @@ export default function Home() {
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-6 text-sm animate-in fade-in slide-in-from-left duration-500 delay-400">
-              <div className="flex items-center gap-2">
-                <CheckCircle2 size={18} className="text-primary" />
-                <span className="text-muted-foreground">Powered by Gemini AI</span>
-              </div>
-            </div>
+           
           </div>
         </div>
 
@@ -300,11 +295,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 py-6 px-6 text-center border-t border-border">
-        <p className="text-sm text-muted-foreground">
-          Built for <span className="text-primary font-medium">@t3dotgg</span> fans • Powered by <span className="text-primary font-medium">Gemini AI</span>
-        </p>
-      </footer>
+      
     </div>
   );
 }
