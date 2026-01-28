@@ -31,11 +31,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://api.fontshare.com" />
-        <meta name="theme-color" content="#07080c" />
-        <meta name="color-scheme" content="dark" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <meta name="theme-color" content="#f4e8ec" />
+        <meta name="color-scheme" content="light" />
       </head>
-      <body className="gradient-bg">{children}</body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

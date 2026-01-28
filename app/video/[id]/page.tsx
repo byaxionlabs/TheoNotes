@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Youtube,
+  Video,
   ArrowLeft,
   ExternalLink,
   Target,
@@ -19,6 +19,7 @@ import {
   Trophy,
   Brain,
   Zap,
+  Play,
 } from "lucide-react";
 
 interface ActionablePoint {
@@ -29,7 +30,7 @@ interface ActionablePoint {
   order: number;
 }
 
-interface Video {
+interface VideoData {
   id: string;
   youtubeUrl: string;
   youtubeId: string;
@@ -42,7 +43,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
   const { id } = use(params);
   const { data: session, isPending } = useSession();
   const router = useRouter();
-  const [video, setVideo] = useState<Video | null>(null);
+  const [video, setVideo] = useState<VideoData | null>(null);
   const [points, setPoints] = useState<ActionablePoint[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -121,7 +122,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
 
   if (isPending || !session) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="loader"></div>
       </div>
     );
@@ -129,25 +130,25 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
 
   if (loading) {
     return (
-      <div className="min-h-screen relative z-10">
-        <header className="sticky top-0 z-50 glass border-b border-[var(--glass-border)]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-background">
+        <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center h-18 py-4">
               <Link href="/dashboard" className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--accent-gold)] to-[var(--accent-gold-soft)] flex items-center justify-center shadow-lg">
-                  <Youtube size={22} className="text-[var(--bg-void)]" />
+                <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
+                  <Video size={20} className="text-primary-foreground" />
                 </div>
-                <span className="text-xl font-bold tracking-tight font-display">VidNote</span>
+                <span className="text-xl font-bold text-foreground">VidNote</span>
               </Link>
             </div>
           </div>
         </header>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="skeleton h-8 w-48 mb-8"></div>
-          <div className="skeleton aspect-video rounded-2xl mb-10"></div>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+          <div className="h-8 w-48 bg-muted animate-pulse rounded mb-8"></div>
+          <div className="aspect-video bg-muted animate-pulse rounded-2xl mb-10"></div>
           <div className="space-y-4">
             {[...Array(5)].map((_, i) => (
-              <div key={i} className="skeleton h-20 rounded-xl"></div>
+              <div key={i} className="h-20 bg-muted animate-pulse rounded-xl"></div>
             ))}
           </div>
         </div>
@@ -157,14 +158,14 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
 
   if (error || !video) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center relative z-10">
-        <div className="text-center animate-fadeIn">
-          <div className="w-20 h-20 rounded-2xl bg-[var(--bg-surface)] border border-[var(--glass-border)] flex items-center justify-center mx-auto mb-6">
-            <Youtube size={40} className="text-[var(--text-muted)]" />
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background">
+        <div className="text-center animate-in fade-in duration-500">
+          <div className="w-24 h-24 rounded-2xl bg-card border-2 border-dashed border-border flex items-center justify-center mx-auto mb-6">
+            <Video size={40} className="text-muted-foreground" />
           </div>
-          <h1 className="text-3xl font-bold font-display mb-3">Video Not Found</h1>
-          <p className="text-[var(--text-secondary)] mb-8 max-w-md">{error || "This video doesn't exist or you don't have access to it."}</p>
-          <Link href="/dashboard" className="btn-primary inline-flex items-center gap-2">
+          <h1 className="text-3xl mb-4 text-foreground">Video Not Found</h1>
+          <p className="text-muted-foreground mb-8 max-w-md">{error || "This video doesn't exist or you don't have access to it."}</p>
+          <Link href="/dashboard" className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-semibold rounded-xl shadow-md hover:shadow-lg transition-all">
             <ArrowLeft size={18} />
             Back to Dashboard
           </Link>
@@ -174,30 +175,35 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
   }
 
   return (
-    <div className="min-h-screen relative z-10">
+    <div className="min-h-screen bg-background">
+      {/* Decorative Background */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 right-0 w-[600px] h-[400px] bg-primary/3 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+      </div>
+
       {/* Header */}
-      <header className="sticky top-0 z-50 glass border-b border-[var(--glass-border)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-18 py-4">
             <Link href="/dashboard" className="flex items-center gap-3 group">
-              <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-[var(--accent-gold)] to-[var(--accent-gold-soft)] flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                <Youtube size={22} className="text-[var(--bg-void)]" />
+              <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                <Video size={20} className="text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold tracking-tight font-display">VidNote</span>
+              <span className="text-xl font-bold text-foreground">VidNote</span>
             </Link>
             <div className="flex items-center gap-2">
               <a
                 href={video.youtubeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-secondary py-2.5 px-4 flex items-center gap-2"
+                className="px-4 py-2.5 flex items-center gap-2 border border-border rounded-xl text-foreground hover:bg-accent hover:border-primary/50 transition-all"
               >
                 <ExternalLink size={16} />
                 <span className="hidden sm:inline">Watch Video</span>
               </a>
               <button
                 onClick={handleDelete}
-                className="btn-icon hover:!border-[var(--danger)]/50 hover:!text-[var(--danger)] hover:!bg-[var(--danger)]/10"
+                className="w-10 h-10 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:text-destructive hover:border-destructive/50 hover:bg-destructive/10 transition-all"
                 title="Delete Video"
               >
                 <Trash2 size={18} />
@@ -208,83 +214,82 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
       </header>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         {/* Back Button */}
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--accent-gold)] transition-colors mb-8 group animate-fadeIn"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-8 group animate-in fade-in duration-300"
         >
           <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
           Back to Dashboard
         </Link>
 
-        {/* Video Info Card */}
-        <div className="glass-card overflow-hidden mb-10 animate-fadeIn" style={{ animationDelay: "0.1s" }}>
-          {/* Gradient top border */}
-          <div className="h-1 bg-gradient-to-r from-[var(--accent-gold)] via-[var(--accent-cyan)] to-[var(--accent-gold)]"></div>
-          
+        {/* Video Hero Section */}
+        <div className="bg-card border border-border rounded-3xl overflow-hidden mb-10 shadow-lg animate-in fade-in slide-in-from-bottom duration-500">
           <div className="flex flex-col lg:flex-row">
-            <div className="lg:w-96 flex-shrink-0 relative overflow-hidden">
+            {/* Thumbnail */}
+            <div className="lg:w-2/5 relative overflow-hidden">
               <Image
                 src={video.thumbnailUrl}
                 alt={video.title || "Video thumbnail"}
-                width={384}
-                height={216}
-                className="w-full h-full object-cover"
+                width={480}
+                height={270}
+                className="w-full h-full object-cover min-h-[200px]"
               />
-              {/* Play overlay */}
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--bg-void)]/20 to-transparent flex items-center justify-center">
+              {/* Play Button Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-br from-background/30 to-transparent flex items-center justify-center">
                 <a
                   href={video.youtubeUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-16 h-16 rounded-full bg-[var(--accent-gold)] flex items-center justify-center shadow-lg hover:scale-110 transition-transform"
+                  className="w-16 h-16 rounded-full bg-primary flex items-center justify-center shadow-xl hover:scale-110 transition-transform"
                 >
-                  <svg className="w-6 h-6 text-[var(--bg-void)] ml-1" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z"/>
-                  </svg>
+                  <Play size={24} className="text-primary-foreground ml-1" fill="currentColor" />
                 </a>
               </div>
             </div>
-            <div className="flex-1 p-6 lg:p-8">
-              <h1 className="text-2xl lg:text-3xl font-bold font-display mb-4 line-clamp-2 leading-tight">{video.title}</h1>
-              <div className="flex flex-wrap items-center gap-4 text-sm text-[var(--text-muted)] mb-6">
+            
+            {/* Info */}
+            <div className="flex-1 p-6 lg:p-8 flex flex-col">
+              <h1 className="text-2xl lg:text-3xl mb-4 text-foreground leading-snug">{video.title}</h1>
+              
+              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
                 <span className="flex items-center gap-2">
                   <Clock size={15} />
-                  Added {new Date(video.createdAt).toLocaleDateString('en-US', {
+                  {new Date(video.createdAt).toLocaleDateString('en-US', {
                     month: 'long',
                     day: 'numeric',
                     year: 'numeric'
                   })}
                 </span>
-                <span className="flex items-center gap-2">
-                  <Sparkles size={15} className="text-[var(--accent-gold)]" />
-                  <span className="text-[var(--accent-gold)]">{points.length} insights</span>
+                <span className="flex items-center gap-2 text-primary">
+                  <Sparkles size={15} />
+                  <span className="font-medium">{points.length} insights extracted</span>
                 </span>
               </div>
 
               {/* Progress Section */}
-              <div className="bg-[var(--bg-deep)] rounded-xl p-5 border border-[var(--glass-border)]">
+              <div className="mt-auto bg-muted/50 rounded-2xl p-5 border border-border">
                 <div className="flex items-center justify-between text-sm mb-3">
                   <div className="flex items-center gap-2">
-                    <Trophy size={16} className="text-[var(--accent-gold)]" />
-                    <span className="font-medium">Progress</span>
+                    <Trophy size={16} className="text-primary" />
+                    <span className="font-medium text-foreground">Your Progress</span>
                   </div>
-                  <span className="text-[var(--accent-gold)] font-bold">
-                    {completedCount} / {points.length}
+                  <span className="text-primary font-bold text-lg">
+                    {completedCount}/{points.length}
                   </span>
                 </div>
-                <div className="progress-bar">
+                <div className="h-3 bg-background rounded-full overflow-hidden border border-border">
                   <div
-                    className="progress-bar-fill"
+                    className="h-full bg-gradient-to-r from-primary to-chart-2 rounded-full transition-all duration-500"
                     style={{ width: `${progress}%` }}
                   ></div>
                 </div>
                 {progress === 100 && (
                   <div className="mt-3 text-center">
-                    <span className="text-sm text-[var(--success)] font-medium flex items-center justify-center gap-2">
+                    <span className="text-sm font-medium flex items-center justify-center gap-2 text-primary">
                       <CheckCircle2 size={16} />
-                      All insights reviewed!
+                      All insights reviewed! Great job!
                     </span>
                   </div>
                 )}
@@ -293,104 +298,107 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
           </div>
         </div>
 
-        {/* Actionable Points */}
-        <div className="space-y-10">
-          {/* Action Items */}
-          {groupedPoints.action.length > 0 && (
-            <section className="animate-fadeIn" style={{ animationDelay: "0.2s" }}>
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-[var(--success-glow)] border border-[var(--success)]/30 flex items-center justify-center">
-                  <Target size={24} className="text-[var(--success)]" />
+        {/* Insights Grid - Two Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Left Column - Action Items */}
+          <div className="space-y-8">
+            {groupedPoints.action.length > 0 && (
+              <section className="animate-in fade-in slide-in-from-left duration-500 delay-100">
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="w-12 h-12 rounded-2xl bg-primary/10 border border-primary/30 flex items-center justify-center">
+                    <Target size={24} className="text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-xl font-bold text-foreground">Action Items</h2>
+                    <p className="text-sm text-muted-foreground">Things to do</p>
+                  </div>
+                  <span className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full bg-primary/10 text-primary border border-primary/30">
+                    {groupedPoints.action.length}
+                  </span>
                 </div>
-                <div>
-                  <h2 className="text-xl font-bold font-display">Action Items</h2>
-                  <p className="text-sm text-[var(--text-muted)]">Things to do after watching</p>
+                <div className="space-y-3">
+                  {groupedPoints.action.map((point) => (
+                    <PointCard
+                      key={point.id}
+                      point={point}
+                      onToggle={() => togglePoint(point.id, point.isCompleted)}
+                      isUpdating={updatingPoint === point.id}
+                      colorClass="primary"
+                    />
+                  ))}
                 </div>
-                <div className="ml-auto">
-                  <span className="badge badge-action">{groupedPoints.action.length}</span>
-                </div>
-              </div>
-              <div className="space-y-3">
-                {groupedPoints.action.map((point, index) => (
-                  <PointCard
-                    key={point.id}
-                    point={point}
-                    onToggle={() => togglePoint(point.id, point.isCompleted)}
-                    isUpdating={updatingPoint === point.id}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </section>
-          )}
+              </section>
+            )}
 
-          {/* Key Takeaways */}
-          {groupedPoints.remember.length > 0 && (
-            <section className="animate-fadeIn" style={{ animationDelay: "0.3s" }}>
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-[var(--warning-glow)] border border-[var(--warning)]/30 flex items-center justify-center">
-                  <Brain size={24} className="text-[var(--warning)]" />
+            {groupedPoints.insight.length > 0 && (
+              <section className="animate-in fade-in slide-in-from-left duration-500 delay-300">
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="w-12 h-12 rounded-2xl bg-chart-3/10 border border-chart-3/30 flex items-center justify-center">
+                    <Lightbulb size={24} className="text-chart-3" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-xl font-bold text-foreground">Insights</h2>
+                    <p className="text-sm text-muted-foreground">Aha moments</p>
+                  </div>
+                  <span className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full bg-chart-3/10 text-chart-3 border border-chart-3/30">
+                    {groupedPoints.insight.length}
+                  </span>
                 </div>
-                <div>
-                  <h2 className="text-xl font-bold font-display">Key Takeaways</h2>
-                  <p className="text-sm text-[var(--text-muted)]">Important facts to remember</p>
+                <div className="space-y-3">
+                  {groupedPoints.insight.map((point) => (
+                    <PointCard
+                      key={point.id}
+                      point={point}
+                      onToggle={() => togglePoint(point.id, point.isCompleted)}
+                      isUpdating={updatingPoint === point.id}
+                      colorClass="chart-3"
+                    />
+                  ))}
                 </div>
-                <div className="ml-auto">
-                  <span className="badge badge-remember">{groupedPoints.remember.length}</span>
-                </div>
-              </div>
-              <div className="space-y-3">
-                {groupedPoints.remember.map((point, index) => (
-                  <PointCard
-                    key={point.id}
-                    point={point}
-                    onToggle={() => togglePoint(point.id, point.isCompleted)}
-                    isUpdating={updatingPoint === point.id}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </section>
-          )}
+              </section>
+            )}
+          </div>
 
-          {/* Insights */}
-          {groupedPoints.insight.length > 0 && (
-            <section className="animate-fadeIn" style={{ animationDelay: "0.4s" }}>
-              <div className="flex items-center gap-4 mb-5">
-                <div className="w-12 h-12 rounded-xl bg-[var(--insight-glow)] border border-[var(--insight)]/30 flex items-center justify-center">
-                  <Lightbulb size={24} className="text-[var(--insight)]" />
+          {/* Right Column - Key Takeaways */}
+          <div className="space-y-8">
+            {groupedPoints.remember.length > 0 && (
+              <section className="animate-in fade-in slide-in-from-right duration-500 delay-200">
+                <div className="flex items-center gap-4 mb-5">
+                  <div className="w-12 h-12 rounded-2xl bg-chart-2/10 border border-chart-2/30 flex items-center justify-center">
+                    <Brain size={24} className="text-chart-2" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-xl font-bold text-foreground">Key Takeaways</h2>
+                    <p className="text-sm text-muted-foreground">Remember these</p>
+                  </div>
+                  <span className="px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full bg-chart-2/10 text-chart-2 border border-chart-2/30">
+                    {groupedPoints.remember.length}
+                  </span>
                 </div>
-                <div>
-                  <h2 className="text-xl font-bold font-display">Insights</h2>
-                  <p className="text-sm text-[var(--text-muted)]">Deeper understanding and aha moments</p>
+                <div className="space-y-3">
+                  {groupedPoints.remember.map((point) => (
+                    <PointCard
+                      key={point.id}
+                      point={point}
+                      onToggle={() => togglePoint(point.id, point.isCompleted)}
+                      isUpdating={updatingPoint === point.id}
+                      colorClass="chart-2"
+                    />
+                  ))}
                 </div>
-                <div className="ml-auto">
-                  <span className="badge badge-insight">{groupedPoints.insight.length}</span>
-                </div>
-              </div>
-              <div className="space-y-3">
-                {groupedPoints.insight.map((point, index) => (
-                  <PointCard
-                    key={point.id}
-                    point={point}
-                    onToggle={() => togglePoint(point.id, point.isCompleted)}
-                    isUpdating={updatingPoint === point.id}
-                    index={index}
-                  />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {points.length === 0 && (
-            <div className="text-center py-16 animate-fadeIn">
-              <div className="w-16 h-16 rounded-2xl bg-[var(--bg-surface)] border border-[var(--glass-border)] flex items-center justify-center mx-auto mb-4">
-                <Zap size={32} className="text-[var(--text-muted)]" />
-              </div>
-              <p className="text-[var(--text-secondary)]">No actionable points found for this video.</p>
-            </div>
-          )}
+              </section>
+            )}
+          </div>
         </div>
+
+        {points.length === 0 && (
+          <div className="text-center py-16 animate-in fade-in duration-500">
+            <div className="w-20 h-20 rounded-2xl bg-card border-2 border-dashed border-border flex items-center justify-center mx-auto mb-4">
+              <Zap size={32} className="text-muted-foreground" />
+            </div>
+            <p className="text-muted-foreground text-lg">No actionable points found for this video.</p>
+          </div>
+        )}
       </main>
     </div>
   );
@@ -400,77 +408,58 @@ interface PointCardProps {
   point: ActionablePoint;
   onToggle: () => void;
   isUpdating: boolean;
-  index: number;
+  colorClass: string;
 }
 
-function PointCard({ point, onToggle, isUpdating, index }: PointCardProps) {
-  const categoryColors = {
-    action: {
-      border: "var(--success)",
-      bg: "var(--success-glow)",
-    },
-    remember: {
-      border: "var(--warning)",
-      bg: "var(--warning-glow)",
-    },
-    insight: {
-      border: "var(--insight)",
-      bg: "var(--insight-glow)",
-    },
+function PointCard({ point, onToggle, isUpdating, colorClass }: PointCardProps) {
+  const borderColorMap: Record<string, string> = {
+    "primary": "border-l-primary",
+    "chart-2": "border-l-chart-2",
+    "chart-3": "border-l-chart-3",
   };
 
-  const colors = categoryColors[point.category as keyof typeof categoryColors] || categoryColors.action;
+  const badgeColorMap: Record<string, string> = {
+    "primary": "bg-primary/10 text-primary border-primary/30",
+    "chart-2": "bg-chart-2/10 text-chart-2 border-chart-2/30",
+    "chart-3": "bg-chart-3/10 text-chart-3 border-chart-3/30",
+  };
 
   return (
     <div
-      className={`glass-card p-5 flex items-start gap-4 transition-all duration-300 cursor-pointer group ${
+      className={`bg-card border border-border rounded-xl p-5 flex items-start gap-4 transition-all duration-300 cursor-pointer group hover:shadow-md hover:border-primary/30 border-l-4 ${borderColorMap[colorClass]} ${
         point.isCompleted ? "opacity-60" : ""
       }`}
-      style={{
-        animationDelay: `${index * 0.05}s`,
-        borderLeftWidth: "3px",
-        borderLeftColor: point.isCompleted ? "var(--glass-border)" : colors.border,
-      }}
       onClick={onToggle}
     >
       <div className="pt-0.5 flex-shrink-0">
         {isUpdating ? (
-          <Loader2 size={26} className="animate-spin text-[var(--accent-gold)]" />
+          <Loader2 size={24} className="animate-spin text-primary" />
         ) : (
-          <input
-            type="checkbox"
-            checked={point.isCompleted}
-            onChange={() => {}}
-            className="checkbox-custom"
-            onClick={(e) => e.stopPropagation()}
-          />
+          <div
+            className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${
+              point.isCompleted
+                ? "bg-primary border-primary"
+                : "border-border group-hover:border-primary"
+            }`}
+          >
+            {point.isCompleted && (
+              <CheckCircle2 size={14} className="text-primary-foreground" />
+            )}
+          </div>
         )}
       </div>
       <div className="flex-1 min-w-0">
         <p
-          className={`text-base leading-relaxed ${
-            point.isCompleted ? "line-through text-[var(--text-muted)]" : ""
+          className={`text-base leading-relaxed text-foreground ${
+            point.isCompleted ? "line-through text-muted-foreground" : ""
           }`}
         >
           {point.content}
         </p>
       </div>
-      <span className={getCategoryBadgeClass(point.category)}>
+      <span className={`hidden sm:inline-flex px-3 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full border ${badgeColorMap[colorClass]}`}>
         {point.category}
       </span>
     </div>
   );
-}
-
-function getCategoryBadgeClass(category: string) {
-  switch (category) {
-    case "action":
-      return "badge badge-action";
-    case "remember":
-      return "badge badge-remember";
-    case "insight":
-      return "badge badge-insight";
-    default:
-      return "badge";
-  }
 }
