@@ -1,4 +1,4 @@
-# Theo-Notes 🌹
+# TheoNotes 🌹
 
 > Actionable insights from Theo's (@t3dotgg) YouTube videos, powered by Gemini AI.
 
