@@ -131,9 +131,7 @@ export default function Home() {
 
             {/* Logo & Title */}
             <div className="flex items-center gap-4 mb-6 animate-in fade-in slide-in-from-left duration-500 delay-50">
-              <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
-                <span className="text-2xl font-bold text-primary-foreground">T</span>
-              </div>
+             
               <h1 className="text-4xl italic lg:text-5xl font-bold text-foreground font-serif">
                 Theo Notes
               </h1>
