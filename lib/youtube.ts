@@ -1,5 +1,9 @@
 import { YoutubeTranscript } from "youtube-transcript";
 
+// Theo's YouTube channel - only videos from this channel are allowed
+export const THEO_CHANNEL_HANDLE = "@t3dotgg";
+export const THEO_CHANNEL_NAME = "Theo - t3․gg";
+
 export function extractVideoId(url: string): string | null {
     const patterns = [
         /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
@@ -31,8 +35,8 @@ export async function getYouTubeTranscript(videoId: string): Promise<string> {
     }
 }
 
-export async function getVideoMetadata(videoId: string): Promise<{ title: string }> {
-    // Use oEmbed API to get video title (no API key required)
+export async function getVideoMetadata(videoId: string): Promise<{ title: string; authorName: string; authorUrl: string }> {
+    // Use oEmbed API to get video title and author info (no API key required)
     try {
         const response = await fetch(
             `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
@@ -43,9 +47,25 @@ export async function getVideoMetadata(videoId: string): Promise<{ title: string
         }
 
         const data = await response.json();
-        return { title: data.title };
+        return {
+            title: data.title,
+            authorName: data.author_name || "",
+            authorUrl: data.author_url || ""
+        };
     } catch (error) {
         console.error("Error fetching video metadata:", error);
-        return { title: "Untitled Video" };
+        return { title: "Untitled Video", authorName: "", authorUrl: "" };
     }
+}
+
+// Check if the video is from Theo's channel
+export function isTheoChannel(authorUrl: string): boolean {
+    // Theo's channel URL patterns
+    const theoPatterns = [
+        /youtube\.com\/@t3dotgg/i,
+        /youtube\.com\/c\/t3dotgg/i,
+        /youtube\.com\/channel\/UCbRP3c757lWg9M-U7TyEkXA/i, // Theo's channel ID
+    ];
+
+    return theoPatterns.some(pattern => pattern.test(authorUrl));
 }

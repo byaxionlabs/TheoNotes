@@ -3,7 +3,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { db } from "@/lib/db";
 import { videos, actionablePoints } from "@/lib/db/schema";
-import { extractVideoId, getYouTubeThumbnail, getVideoMetadata } from "@/lib/youtube";
+import { extractVideoId, getYouTubeThumbnail, getVideoMetadata, isTheoChannel, THEO_CHANNEL_HANDLE } from "@/lib/youtube";
 import { extractActionablePoints } from "@/lib/ai";
 import { eq } from "drizzle-orm";
 import { nanoid } from "nanoid";
@@ -32,6 +32,14 @@ export async function POST(request: NextRequest) {
         // Get video metadata
         const metadata = await getVideoMetadata(videoId);
         const thumbnailUrl = getYouTubeThumbnail(videoId);
+
+        // Validate that the video is from Theo's channel
+        if (!isTheoChannel(metadata.authorUrl)) {
+            return NextResponse.json(
+                { error: `This app only works with videos from Theo's channel (${THEO_CHANNEL_HANDLE}). Please use a video from his channel.` },
+                { status: 400 }
+            );
+        }
 
         // Normalize YouTube URL for Gemini
         const youtubeUrl = `https://www.youtube.com/watch?v=${videoId}`;

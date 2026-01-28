@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Video,
   Plus,
   Loader2,
   Trash2,
@@ -20,8 +19,8 @@ import {
   Zap,
   LayoutGrid,
   User,
-  Heart,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface VideoItem {
   id: string;
@@ -134,9 +133,9 @@ export default function Dashboard() {
         <div className="p-6 border-b border-border">
           <Link href="/dashboard" className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
-              <Video size={20} className="text-primary-foreground" />
+              <span className="text-lg font-bold text-primary-foreground">T</span>
             </div>
-            <span className="text-xl font-bold text-foreground">VidNote</span>
+            <span className="text-xl font-bold text-foreground">Theo-Notes</span>
           </Link>
         </div>
 
@@ -148,21 +147,31 @@ export default function Dashboard() {
               className="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/10 text-primary font-medium"
             >
               <LayoutGrid size={20} />
-              <span>My Videos</span>
+              <span>My Notes</span>
             </Link>
+          </div>
+          
+          {/* Channel Info */}
+          <div className="mt-6 p-4 bg-muted/50 rounded-xl border border-border">
+            <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">Videos from</p>
+            <p className="text-sm font-medium text-primary">@t3dotgg</p>
+            <p className="text-xs text-muted-foreground">Theo&apos;s Channel Only</p>
           </div>
         </nav>
 
         {/* User Section */}
         <div className="p-4 border-t border-border">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
-              <User size={18} className="text-primary" />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center">
+                <User size={18} className="text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground truncate">{session.user.name}</p>
+                <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{session.user.name}</p>
-              <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
-            </div>
+            <ThemeToggle />
           </div>
           <button
             onClick={() => signOut()}
@@ -176,30 +185,33 @@ export default function Dashboard() {
 
       {/* Mobile Header */}
       <header className="lg:hidden sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
-        <div className="px-4 py-4 flex items-center justify-between">
+        <div className="px-6 py-4 flex items-center justify-between">
           <Link href="/dashboard" className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
-              <Video size={20} className="text-primary-foreground" />
+              <span className="text-lg font-bold text-primary-foreground">T</span>
             </div>
-            <span className="text-xl font-bold text-foreground">VidNote</span>
+            <span className="text-xl font-bold text-foreground">Theo-Notes</span>
           </Link>
-          <button
-            onClick={() => signOut()}
-            className="w-10 h-10 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:text-destructive"
-          >
-            <LogOut size={18} />
-          </button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <button
+              onClick={() => signOut()}
+              className="w-10 h-10 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:text-destructive"
+            >
+              <LogOut size={18} />
+            </button>
+          </div>
         </div>
       </header>
 
       {/* Main Content */}
       <main className="lg:ml-64 relative z-10">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="max-w-6xl mx-auto px-6 py-10">
           {/* Page Header */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
             <div className="animate-in fade-in slide-in-from-left duration-500">
               <h1 className="text-4xl lg:text-5xl mb-3 text-foreground">
-                Your <span className="text-primary italic">Video Library</span>
+                Your <span className="text-primary italic">Theo Notes</span>
               </h1>
               <p className="text-muted-foreground text-lg">
                 {videos.length} {videos.length === 1 ? "video" : "videos"} with extracted insights
@@ -237,9 +249,9 @@ export default function Dashboard() {
                   <Sparkles size={26} className="text-primary-foreground" />
                 </div>
               </div>
-              <h2 className="text-3xl mb-4 text-foreground">No videos yet</h2>
+              <h2 className="text-3xl mb-4 text-foreground">No notes yet</h2>
               <p className="text-muted-foreground mb-8 max-w-md mx-auto text-lg">
-                Add your first YouTube video to start extracting actionable insights
+                Add your first video from <span className="text-primary font-medium">@t3dotgg</span> to start extracting insights
               </p>
               <button
                 onClick={() => setShowModal(true)}
@@ -270,7 +282,7 @@ export default function Dashboard() {
                       <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                         <span className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground text-sm font-medium rounded-lg shadow-md">
                           <CheckCircle2 size={16} />
-                          View Insights
+                          View Notes
                         </span>
                       </div>
                     </div>
@@ -342,9 +354,9 @@ export default function Dashboard() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-primary/10 border border-primary/30 mb-4">
                 <Sparkles size={28} className="text-primary" />
               </div>
-              <h2 className="text-2xl font-bold text-foreground mb-2">Add New Video</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-2">Add Theo Video</h2>
               <p className="text-muted-foreground text-sm">
-                Paste a YouTube URL to extract insights
+                Paste a video URL from <span className="text-primary">@t3dotgg</span>
               </p>
             </div>
 
@@ -362,6 +374,9 @@ export default function Dashboard() {
                   required
                   disabled={processing}
                 />
+                <p className="text-xs text-muted-foreground mt-2">
+                  Only videos from Theo&apos;s channel are supported
+                </p>
               </div>
 
               {error && (
@@ -379,7 +394,7 @@ export default function Dashboard() {
                   <div className="space-y-2.5 text-sm text-muted-foreground">
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
-                      <p>Processing video content</p>
+                      <p>Processing Theo&apos;s video</p>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 rounded-full bg-chart-2 animate-pulse" style={{ animationDelay: "0.2s" }}></div>
@@ -401,12 +416,12 @@ export default function Dashboard() {
                 {processing ? (
                   <>
                     <Loader2 size={18} className="animate-spin" />
-                    Extracting Insights...
+                    Extracting Notes...
                   </>
                 ) : (
                   <>
                     <Zap size={18} />
-                    Extract Insights
+                    Extract Notes
                   </>
                 )}
               </button>

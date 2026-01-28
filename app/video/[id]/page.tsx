@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Video,
   ArrowLeft,
   ExternalLink,
   Target,
@@ -21,6 +20,7 @@ import {
   Zap,
   Play,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface ActionablePoint {
   id: string;
@@ -132,18 +132,18 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
     return (
       <div className="min-h-screen bg-background">
         <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto px-6">
             <div className="flex items-center h-18 py-4">
               <Link href="/dashboard" className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md">
-                  <Video size={20} className="text-primary-foreground" />
+                  <span className="text-lg font-bold text-primary-foreground">T</span>
                 </div>
-                <span className="text-xl font-bold text-foreground">VidNote</span>
+                <span className="text-xl font-bold text-foreground">Theo-Notes</span>
               </Link>
             </div>
           </div>
         </header>
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="max-w-5xl mx-auto px-6 py-10">
           <div className="h-8 w-48 bg-muted animate-pulse rounded mb-8"></div>
           <div className="aspect-video bg-muted animate-pulse rounded-2xl mb-10"></div>
           <div className="space-y-4">
@@ -158,10 +158,10 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
 
   if (error || !video) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background px-6">
         <div className="text-center animate-in fade-in duration-500">
           <div className="w-24 h-24 rounded-2xl bg-card border-2 border-dashed border-border flex items-center justify-center mx-auto mb-6">
-            <Video size={40} className="text-muted-foreground" />
+            <span className="text-4xl font-bold text-muted-foreground">T</span>
           </div>
           <h1 className="text-3xl mb-4 text-foreground">Video Not Found</h1>
           <p className="text-muted-foreground mb-8 max-w-md">{error || "This video doesn't exist or you don't have access to it."}</p>
@@ -183,13 +183,13 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
 
       {/* Header */}
       <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto px-6">
           <div className="flex items-center justify-between h-18 py-4">
             <Link href="/dashboard" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-                <Video size={20} className="text-primary-foreground" />
+                <span className="text-lg font-bold text-primary-foreground">T</span>
               </div>
-              <span className="text-xl font-bold text-foreground">VidNote</span>
+              <span className="text-xl font-bold text-foreground">Theo-Notes</span>
             </Link>
             <div className="flex items-center gap-2">
               <a
@@ -201,6 +201,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
                 <ExternalLink size={16} />
                 <span className="hidden sm:inline">Watch Video</span>
               </a>
+              <ThemeToggle />
               <button
                 onClick={handleDelete}
                 className="w-10 h-10 flex items-center justify-center rounded-xl border border-border text-muted-foreground hover:text-destructive hover:border-destructive/50 hover:bg-destructive/10 transition-all"
@@ -214,7 +215,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <main className="relative z-10 max-w-5xl mx-auto px-6 py-10">
         {/* Back Button */}
         <Link
           href="/dashboard"
@@ -251,6 +252,11 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
             
             {/* Info */}
             <div className="flex-1 p-6 lg:p-8 flex flex-col">
+              <div className="flex items-center gap-2 text-xs text-primary font-medium uppercase tracking-wider mb-3">
+                <span>@t3dotgg</span>
+                <span className="text-muted-foreground">•</span>
+                <span className="text-muted-foreground">Theo&apos;s Channel</span>
+              </div>
               <h1 className="text-2xl lg:text-3xl mb-4 text-foreground leading-snug">{video.title}</h1>
               
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
@@ -264,7 +270,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
                 </span>
                 <span className="flex items-center gap-2 text-primary">
                   <Sparkles size={15} />
-                  <span className="font-medium">{points.length} insights extracted</span>
+                  <span className="font-medium">{points.length} notes extracted</span>
                 </span>
               </div>
 
@@ -289,7 +295,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
                   <div className="mt-3 text-center">
                     <span className="text-sm font-medium flex items-center justify-center gap-2 text-primary">
                       <CheckCircle2 size={16} />
-                      All insights reviewed! Great job!
+                      All notes reviewed! Great job!
                     </span>
                   </div>
                 )}
@@ -396,7 +402,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
             <div className="w-20 h-20 rounded-2xl bg-card border-2 border-dashed border-border flex items-center justify-center mx-auto mb-4">
               <Zap size={32} className="text-muted-foreground" />
             </div>
-            <p className="text-muted-foreground text-lg">No actionable points found for this video.</p>
+            <p className="text-muted-foreground text-lg">No notes found for this video.</p>
           </div>
         )}
       </main>
